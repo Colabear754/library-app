@@ -29,7 +29,7 @@ class UserServiceTest @Autowired constructor(private val userRepository: UserRep
         val results = userRepository.findAll()
         assertThat(results).hasSize(1)
         assertThat(results[0].name).isEqualTo("테스트")
-        assertThat(results[0].age ?: null).isNull()
+        assertThat(results[0].age).isNull()
     }
 
     @Test
@@ -52,7 +52,7 @@ class UserServiceTest @Autowired constructor(private val userRepository: UserRep
     fun updateUserNameTest() {
         // given
         val savedUser = userRepository.save(User("A", null))
-        val request = UserUpdateRequest(savedUser.id, "B")
+        val request = UserUpdateRequest(savedUser.id!!, "B")
 
         // when
         userService.updateUserName(request)
