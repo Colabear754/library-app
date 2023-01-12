@@ -39,7 +39,7 @@ class UserServiceTest @Autowired constructor(private val userRepository: UserRep
         userRepository.saveAll(listOf(User("A", 20), User("B", null)))
 
         // when
-        val results = userService.users
+        val results = userService.getUsers()
 
         // then
         assertThat(results).hasSize(2)
