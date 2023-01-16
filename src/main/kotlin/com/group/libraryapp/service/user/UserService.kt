@@ -19,7 +19,7 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     @Transactional(readOnly = true)
-    fun getUsers() = userRepository.findAll().map(::UserResponse)
+    fun getUsers() = userRepository.findAll().map { UserResponse.of(it) }
 
     @Transactional
     fun updateUserName(request: UserUpdateRequest) {
