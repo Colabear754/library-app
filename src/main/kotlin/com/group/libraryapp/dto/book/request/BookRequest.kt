@@ -1,3 +1,5 @@
 package com.group.libraryapp.dto.book.request
 
-data class BookRequest(val name: String, val type: String)
+import com.group.libraryapp.type.BookType
+
+data class BookRequest(val name: String, val type: BookType)

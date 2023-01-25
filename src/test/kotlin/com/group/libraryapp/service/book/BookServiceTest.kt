@@ -9,6 +9,7 @@ import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
+import com.group.libraryapp.type.BookType
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -35,13 +36,13 @@ class BookServiceTest @Autowired constructor(
     @DisplayName("책 등록 테스트")
     fun saveBookTest() {
         // given
-        val request = BookRequest("이상한 나라의 엘리스", "COMPUTER")
+        val request = BookRequest("이상한 나라의 엘리스", BookType.COMPUTER)
         // when
         bookService.saveBook(request)
         // then
         val books = bookRepository.findAll()
         assertThat(books[0].name).isEqualTo("이상한 나라의 엘리스")
-        assertThat(books[0].type).isEqualTo("COMPUTER")
+        assertThat(books[0].type).isEqualTo(BookType.COMPUTER)
     }
 
     @Test
