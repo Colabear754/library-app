@@ -10,6 +10,7 @@ import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
 import com.group.libraryapp.type.BookType
+import com.group.libraryapp.type.UserLoanStatus
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -59,7 +60,7 @@ class BookServiceTest @Autowired constructor(
         assertThat(results).hasSize(1)
         assertThat(results[0].bookName).isEqualTo("이상한 나라의 엘리스")
         assertThat(results[0].user.id).isEqualTo(savedUser.id)
-        assertThat(results[0].isReturn).isFalse
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.LOANED)
     }
 
     @Test
@@ -68,7 +69,7 @@ class BookServiceTest @Autowired constructor(
         // given
         bookRepository.save(Book.fixture("이상한 나라의 엘리스"))
         val savedUser = userRepository.save(User("AAA", 30))
-        userLoanHistoryRepository.save(UserLoanHistory(savedUser, "이상한 나라의 엘리스", false))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(savedUser, "이상한 나라의 엘리스", UserLoanStatus.LOANED))
         val request = BookLoanRequest("AAA", "이상한 나라의 엘리스")
         // when then
         assertThrows<IllegalArgumentException> {
@@ -83,13 +84,13 @@ class BookServiceTest @Autowired constructor(
     fun returnBookTest() {
         // given
         val savedUser = userRepository.save(User("AAA", 30))
-        userLoanHistoryRepository.save(UserLoanHistory(savedUser, "이상한 나라의 엘리스", false))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(savedUser, "이상한 나라의 엘리스", UserLoanStatus.LOANED))
         val request = BookReturnRequest("AAA", "이상한 나라의 엘리스")
         // when
         bookService.returnBook(request)
         // then
         val results = userLoanHistoryRepository.findAll()
         assertThat(results).hasSize(1)
-        assertThat(results[0].isReturn).isTrue
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
 }
