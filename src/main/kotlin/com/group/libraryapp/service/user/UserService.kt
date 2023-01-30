@@ -4,10 +4,8 @@ import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
-import com.group.libraryapp.dto.user.response.BookHistoryResponse
 import com.group.libraryapp.dto.user.response.UserLoanHistoryResponse
 import com.group.libraryapp.dto.user.response.UserResponse
-import com.group.libraryapp.type.UserLoanStatus
 import com.group.libraryapp.util.fail
 import com.group.libraryapp.util.findByIdOrThorw
 import org.springframework.stereotype.Service
@@ -37,7 +35,5 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     @Transactional(readOnly = true)
-    fun getUserLoanHistories() = userRepository.findAllWithHistories().map { UserLoanHistoryResponse(it.name, it.userLoanHistories.map { history ->
-            BookHistoryResponse(history.bookName, history.status == UserLoanStatus.RETURNED)
-        }) }
+    fun getUserLoanHistories() = userRepository.findAllWithHistories().map(UserLoanHistoryResponse::of)
 }

@@ -14,11 +14,18 @@ class UserLoanHistory(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 ) {
+    val isReturn get() = this.status == UserLoanStatus.RETURNED
+
     fun doReturn() {
         this.status = UserLoanStatus.RETURNED
     }
 
     companion object {
-        fun fixture(user: User, bookName: String = "이상한 나라의 엘리스", status: UserLoanStatus = UserLoanStatus.LOANED, id: Long? = null) = UserLoanHistory(user, bookName, status, id)
+        fun fixture(
+            user: User,
+            bookName: String = "이상한 나라의 엘리스",
+            status: UserLoanStatus = UserLoanStatus.LOANED,
+            id: Long? = null
+        ) = UserLoanHistory(user, bookName, status, id)
     }
 }
