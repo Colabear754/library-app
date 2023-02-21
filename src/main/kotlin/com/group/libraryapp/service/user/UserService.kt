@@ -6,13 +6,14 @@ import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
 import com.group.libraryapp.dto.user.response.UserLoanHistoryResponse
 import com.group.libraryapp.dto.user.response.UserResponse
+import com.group.libraryapp.repository.user.UserQuerydslRepository
 import com.group.libraryapp.util.fail
 import com.group.libraryapp.util.findByIdOrThorw
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository, private val userQuerydslRepository: UserQuerydslRepository) {
     @Transactional
     fun saveUser(request: UserCreateRequest) {
         val newUser = User(request.name, request.age)
@@ -35,5 +36,5 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     @Transactional(readOnly = true)
-    fun getUserLoanHistories() = userRepository.findAllWithHistories().map(UserLoanHistoryResponse::of)
+    fun getUserLoanHistories() = userQuerydslRepository.findAllWithHistories().map(UserLoanHistoryResponse::of)
 }
